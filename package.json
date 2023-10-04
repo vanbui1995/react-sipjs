@@ -1,5 +1,5 @@
 {
-  "name": "react-sipjs-client",
+  "name": "react-sipjs",
   "version": "0.0.1",
   "description": "",
   "main": "dist/index.umd.js",
