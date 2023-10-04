@@ -1,1 +1,2 @@
-export * from "./sip-provider";
+export * from "./SIPProviderContext";
+export * from "./SIPProvider";

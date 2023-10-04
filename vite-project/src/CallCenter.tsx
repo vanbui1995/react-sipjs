@@ -1,69 +1,7 @@
-import React, { useState } from "react";
-import {
-  useSIPProvider,
-  useSessionCall,
-} from "../../src/context/SIPProviderContext";
-import {
-  RegisterStatus,
-  CONNECT_STATUS,
-  SessionDirection,
-} from "../../src/type";
-import { SessionState } from "sip.js";
-
-export const CallSessionItem = (props: { sessionId: string }) => {
-  const { sessionId } = props;
-  const {
-    isHeld,
-    isMuted,
-    decline,
-    hangup,
-    hold,
-    mute,
-    answer,
-    session,
-    unhold,
-    unmute,
-    direction,
-  } = useSessionCall(sessionId);
-
-  return (
-    <div>
-      <div>
-        <div>
-          Session ID: <b>{session.id}</b>
-        </div>
-        <div>
-          Direction:{" "}
-          {direction === SessionDirection.INCOMING
-            ? "Incoming Call"
-            : "Outgoing Call"}
-        </div>
-        <div>Status: {session.state}</div>
-      </div>
-      {session.state === SessionState.Initial && (
-        <>
-          <button onClick={answer}>Answer</button>
-          <button onClick={decline}>Decline</button>
-        </>
-      )}
-      <>
-        {SessionState.Established === session.state && (
-          <>
-            <button onClick={isHeld ? unhold : hold}>
-              {isHeld ? "Unhold" : "Hold"}
-            </button>
-            <button onClick={isMuted ? unmute : mute}>
-              {isMuted ? "Ummute" : "Mute"}
-            </button>
-          </>
-        )}
-      </>
-      {![SessionState.Terminated, SessionState.Terminating].includes(
-        session.state
-      ) && <button onClick={hangup}>Hangup</button>}
-    </div>
-  );
-};
+import { useState } from "react";
+import { useSIPProvider } from "../../src";
+import { RegisterStatus, CONNECT_STATUS } from "../../src/type";
+import { CallSessionItem } from "./CallSessionItem";
 
 export const CallCenter = () => {
   const {
@@ -79,80 +17,138 @@ export const CallCenter = () => {
   const [callTo, setCallTo] = useState<string>("7147520454");
 
   return (
-    <div>
-      <div>
-        <label>SIP Account</label>
+    <div className="flex justify-center">
+      <div className="min-w-[700px] flex flex-col gap-5">
         <div>
-          <input
-            value={username}
-            type="text"
-            onChange={(e) => {
+          <form
+            onSubmit={(e) => {
               e.preventDefault();
-              setUsername(e.target.value);
+              connectAndRegister({
+                username: username,
+                password: password,
+              });
             }}
-          />
-          <input
-            value={password}
-            type="password"
-            onChange={(e) => {
-              e.preventDefault();
-              setPassword(e.target.value);
-            }}
-          />
+          >
+            <div className="flex flex-col gap-5">
+              <label>SIP Credential</label>
+              <input
+                value={username}
+                type="text"
+                onChange={(e) => {
+                  e.preventDefault();
+                  setUsername(e.target.value);
+                }}
+              />
+              <input
+                value={password}
+                type="password"
+                onChange={(e) => {
+                  e.preventDefault();
+                  setPassword(e.target.value);
+                }}
+              />
+
+              {connectStatus !== CONNECT_STATUS.CONNECTED ? (
+                <button
+                  type="submit"
+                  className="text-[0.8rem] bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-2 border border-blue-500 hover:border-transparent rounded"
+                >
+                  Connect
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    sessionManager?.disconnect();
+                  }}
+                  className="text-[0.8rem] bg-transparent hover:bg-red-500 text-red-700 font-semibold hover:text-white py-2 px-2 border border-red-500 hover:border-transparent rounded"
+                >
+                  Disconnect
+                </button>
+              )}
+            </div>
+          </form>
+        </div>
+        <div>
+          <div className="mt-1 flex items-center gap-x-1.5">
+            <div
+              className={`flex-none rounded-full bg-${
+                connectStatus === CONNECT_STATUS.CONNECTED
+                  ? "emerald"
+                  : "yellow"
+              }-500/20 p-1`}
+            >
+              <div
+                className={`h-1.5 w-1.5 rounded-full ${
+                  connectStatus === CONNECT_STATUS.CONNECTED
+                    ? "bg-emerald-500"
+                    : "bg-yellow-500"
+                }`}
+              ></div>
+            </div>
+            <p className="text-xs leading-5 text-gray-500">
+              Connect Status: {connectStatus}
+            </p>
+          </div>
+          <div className="mt-1 flex items-center gap-x-1.5">
+            <div
+              className={`flex-none rounded-full bg-${
+                registerStatus === RegisterStatus.REGISTERED
+                  ? "emerald"
+                  : "yellow"
+              }-500/20 p-1`}
+            >
+              <div
+                className={`h-1.5 w-1.5 rounded-full ${
+                  registerStatus === RegisterStatus.REGISTERED
+                    ? "bg-emerald-500"
+                    : "bg-yellow-500"
+                }`}
+              ></div>
+            </div>
+            <p className="text-xs leading-5 text-gray-500">
+              Register Status: {registerStatus}
+            </p>
+          </div>
         </div>
 
-        <div>
-          {connectStatus !== CONNECT_STATUS.CONNECTED ? (
-            <button
-              className="btn btn-blue"
-              onClick={() => {
-                connectAndRegister({
-                  username: username,
-                  password: password,
-                });
+        <form
+          onSubmit={async (e) => {
+            e.preventDefault();
+            await sessionManager?.call(
+              `sip:${callTo}@voice.chatchilladev.sip.jambonz.cloud`,
+              {}
+            );
+          }}
+        >
+          <div className="flex flex-col gap-5">
+            <label>Make the new call</label>
+            <input
+              value={callTo}
+              type="text"
+              onChange={(e) => {
+                e.preventDefault();
+                setCallTo(e.target.value);
               }}
-            >
-              Connect
-            </button>
-          ) : (
+            />
+
             <button
-              onClick={() => {
-                sessionManager?.disconnect();
-              }}
+              type="submit"
+              className="text-[0.8rem] bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-2 border border-blue-500 hover:border-transparent rounded"
             >
-              Disconnect
+              Call
             </button>
-          )}
+          </div>
+        </form>
+        <div className="flex flex-1 items-center justify-center">
+          <ul role="list" className="divide-y divide-gray-100">
+            {Object.keys(sessions).map((sessionId) => (
+              <CallSessionItem key={sessionId} sessionId={sessionId} />
+            ))}
+          </ul>
         </div>
       </div>
-      <div>Connect Status {connectStatus}</div>
-      <div>Registered Status {registerStatus}</div>
-      Call to{" "}
-      <input
-        value={callTo}
-        type="text"
-        onChange={(e) => {
-          e.preventDefault();
-          setCallTo(e.target.value);
-        }}
-      />
-      <button
-        disabled={
-          connectStatus !== connectStatus ||
-          registerStatus !== RegisterStatus.REGISTERED
-        }
-        onClick={async () => {
-          await sessionManager?.call(
-            `sip:${callTo}@voice.chatchilladev.sip.jambonz.cloud`,
-            {}
-          );
-        }}
-      >
-        Call
-      </button>
-      {Object.keys(sessions).map((sessionId) => (
-        <CallSessionItem key={sessionId} sessionId={sessionId} />
-      ))}
     </div>
   );
 };

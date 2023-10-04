@@ -5,6 +5,7 @@ import {
   RegisterStatus,
   CONNECT_STATUS,
   SessionDirection,
+  Timer,
 } from "../type";
 import { Inviter } from "sip.js";
 
@@ -14,6 +15,7 @@ export const ProviderContext = createContext<IProviderContext>({
   connectStatus: CONNECT_STATUS.WAIT_REQUEST_CONNECT,
   registerStatus: RegisterStatus.UNREGISTERED,
   sessions: {},
+  sessionTimer: {},
 });
 
 export const useSIPProvider = () => {
@@ -21,7 +23,7 @@ export const useSIPProvider = () => {
 };
 
 export const useSessionCall = (sessionId: string) => {
-  const { sessions, sessionManager } = useSIPProvider();
+  const { sessions, sessionManager, sessionTimer } = useSIPProvider();
   const session = sessions[sessionId];
 
   const [isMuted, setIsMuted] = useState<boolean>(
@@ -35,10 +37,13 @@ export const useSessionCall = (sessionId: string) => {
     session instanceof Inviter
       ? SessionDirection.OUTGOING
       : SessionDirection.INCOMING;
-      
+
+  const timer: Timer | undefined = sessionTimer[sessionId];
+
   return {
     direction,
     session: session,
+    timer,
     hold: () => {
       sessionManager?.hold(session);
       setIsHeld(true);

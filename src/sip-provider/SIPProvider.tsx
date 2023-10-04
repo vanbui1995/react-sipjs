@@ -3,7 +3,7 @@ import React from "react";
 import { Session } from "sip.js/lib/api/session";
 import { SessionManager } from "sip.js/lib/platform/web";
 import { ErrorMessageLevel1, ErrorMessageLevel2 } from "../enums/error";
-import { ProviderContext } from "../context/SIPProviderContext";
+import { ProviderContext } from "./SIPProviderContext";
 import {
   RegisterStatus,
   SIPAccount,
@@ -58,7 +58,6 @@ export const SIPProvider: React.FunctionComponent<{
       },
       delegate: {
         onCallCreated: (session) => {
-          console.log("fefefe", { state: session.state });
           session.stateChange.addListener((state) => {
             console.info(
               ErrorMessageLevel1.SIP_PROVIDER,
@@ -67,13 +66,20 @@ export const SIPProvider: React.FunctionComponent<{
             updateSession(session);
           });
           updateSession(session);
+          setSessionTimer((timer) => ({
+            ...timer,
+            [session.id]: {
+              createdAt: new Date(),
+            },
+          }));
         },
         onCallAnswered: (session) => {
           updateSession(session);
           setSessionTimer((timer) => ({
             ...timer,
             [session.id]: {
-              startAt: new Date(),
+              ...(timer[session.id] || {}),
+              answeredAt: new Date(),
             },
           }));
         },
@@ -83,7 +89,7 @@ export const SIPProvider: React.FunctionComponent<{
             ...timer,
             [session.id]: {
               ...(timer[session.id] || {}),
-              endAt: new Date(),
+              hangupAt: new Date(),
             },
           }));
         },
@@ -121,8 +127,6 @@ export const SIPProvider: React.FunctionComponent<{
     sessionManager.connect();
   }, []);
 
-  console.log({ sessionTimer });
-
   return (
     <>
       <ProviderContext.Provider
@@ -132,6 +136,7 @@ export const SIPProvider: React.FunctionComponent<{
           connectStatus,
           registerStatus,
           sessions,
+          sessionTimer,
         }}
       >
         {children}

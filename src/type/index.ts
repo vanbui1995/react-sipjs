@@ -28,6 +28,7 @@ export interface IProviderContext {
   connectStatus: CONNECT_STATUS;
   registerStatus: RegisterStatus;
   sessions: Record<string, Session>;
+  sessionTimer: SessionTimer;
 }
 
 export enum SessionDirection {
@@ -35,11 +36,11 @@ export enum SessionDirection {
   OUTGOING = "OUTGOING",
 }
 
-export type SessionTimer = Record<
-  string,
-  {
-    startAt: Date;
-    receivedAt?: Date;
-    endAt?: Date;
-  }
->;
+export type Timer = {
+  createdAt: Date;
+  receivedAt?: Date;
+  answeredAt?: Date;
+  hangupAt?: Date;
+};
+
+export type SessionTimer = Record<string, Timer>;
