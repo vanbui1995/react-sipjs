@@ -1,4 +1,5 @@
 
+
 <!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
 <a name="readme-top"></a>
 <!--
@@ -90,11 +91,115 @@ Install via npm or yarn
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-I will update later, for now please see the example on `examples/full-example` , it contains all features provided by this library
+1. Import and use the `SIPProvider` on our root application:
+```js
+import { SIPProvider } from "react-sipjs";
 
+function App() {
+  return (
+    <div className="p-5">
+      <SIPProvider
+        options={{
+          domain: "voice.chatchilladev.sip.jambonz.cloud",
+          webSocketServer: "wss://sip.jambonz.cloud:8443",
+        }}
+      >
+        <div>
+          <CallCenter />
+        </div>
+      </SIPProvider>
+    </div>
+  );
+}
+```
 
+2. Use `useSIPProvider` at the hook to get `connectAndRegister` method to connect & register with SIP account
+```js
 
-See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a full list of proposed features (and known issues).
+import { useSIPProvider } from "react-sipjs";
+
+export const CallCenter = () => {
+  const [username, setUsername] = useState<string>("test8");
+  const [password, setPassword] = useState<string>("test123");
+  const {
+    connectAndRegister,
+    connectStatus,
+  } = useSIPProvider();
+  
+  useEffect(() => {
+    connectAndRegister({
+      username: username,
+      password: password,
+    });
+  }, []);
+
+  return ...;
+}
+```
+3. Make the first call
+```js
+const {
+  sessionManager
+  sessions
+} = useSIPProvider();
+
+await sessionManager?.call(`sip:${callTo}@voice.chatchilladev.sip.jambonz.cloud`);
+```
+4. Retrive reactive sessions
+```js
+const {
+  sessions
+} = useSIPProvider();
+
+sessions.forEach(session => {
+  console.log(session.id, session.state);
+})
+```
+5. Perform action with single session with `useSessionCall`
+```js
+export const CallSessionItem = (props: { sessionId: string }) => {
+  const { sessionId } = props;
+  const {
+    isHeld,
+    isMuted,
+    decline,
+    hangup,
+    hold,
+    mute,
+    answer,
+    session,
+    unhold,
+    unmute,
+    direction,
+    timer,
+  } = useSessionCall(sessionId);
+  
+  return (
+    <div>
+      <p>{session.state}</p>
+        {session.state === SessionState.Initial && (
+        <>
+          <button  onClick={answer}>Answer</button>
+          <button  onClick={decline}>Decline</button>
+        </>
+      )}
+      
+      {SessionState.Established === session.state && (
+        <>
+          <button  onClick={isHeld ? unhold : hold}>
+            {isHeld ? "Unhold" : "Hold"}
+          </button>
+          <button  onClick={isMuted ? unmute : mute}>
+            {isMuted ? "Ummute" : "Mute"}
+          </button>
+        </>
+      )}
+      {![SessionState.Terminating, SessionState.Terminated].includes(
+      session.state) && <button  onClick={hangup}>Hang Up</button>}
+    </div>
+  )
+}
+```
 
 <!-- CONTRIBUTING -->
 ## Contributing
