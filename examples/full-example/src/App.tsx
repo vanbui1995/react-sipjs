@@ -1,5 +1,5 @@
 import React from "react";
-import { SIPProvider } from "../../src/sip-provider";
+import { SIPProvider } from "../../../src/sip-provider";
 import { CallCenter } from "./CallCenter";
 
 function App() {

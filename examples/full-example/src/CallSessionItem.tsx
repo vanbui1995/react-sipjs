@@ -1,6 +1,6 @@
 import { SessionState } from "sip.js";
-import { useSessionCall } from "../../src";
-import { SessionDirection } from "../../src/type";
+import { useSessionCall } from "../../../src";
+import { SessionDirection } from "../../../src/type";
 import { CallTimer } from "./CallTimer";
 
 export const CallSessionItem = (props: { sessionId: string }) => {
