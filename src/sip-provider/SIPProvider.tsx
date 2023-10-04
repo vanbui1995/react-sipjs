@@ -1,4 +1,4 @@
-import { ReactNode, useCallback, useEffect, useRef, useState } from "react";
+import { ReactNode, useCallback, useRef, useState } from "react";
 import React from "react";
 import { Session } from "sip.js/lib/api/session";
 import { SessionManager } from "sip.js/lib/platform/web";
