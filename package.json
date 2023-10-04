@@ -21,5 +21,8 @@
   },
   "dependencies": {
     "sip.js": "^0.21.2"
+  },
+  "publishConfig": {
+    "@vanbui1995:registry": "https://npm.pkg.github.com"
   }
 }
