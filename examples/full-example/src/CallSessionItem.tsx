@@ -1,6 +1,6 @@
 import { SessionState } from "sip.js";
-import { useSessionCall } from "../../../src";
-import { SessionDirection } from "../../../src/type";
+import { useSessionCall, SessionDirection } from "react-sipjs";
+
 import { CallTimer } from "./CallTimer";
 
 export const CallSessionItem = (props: { sessionId: string }) => {
@@ -35,8 +35,18 @@ export const CallSessionItem = (props: { sessionId: string }) => {
 
             {session.state === SessionState.Initial && (
               <>
-                <button onClick={answer} className="text-[0.8rem] bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-[0.1rem] px-[0.3rem] border border-blue-500 hover:border-transparent rounded">Answer</button>
-                <button onClick={decline} className="text-[0.8rem] bg-transparent hover:bg-red-500 text-red-700 font-semibold hover:text-white py-[0.1rem] px-[0.3rem] border border-red-500 hover:border-transparent rounded">Decline</button>
+                <button
+                  onClick={answer}
+                  className="text-[0.8rem] bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-[0.1rem] px-[0.3rem] border border-blue-500 hover:border-transparent rounded"
+                >
+                  Answer
+                </button>
+                <button
+                  onClick={decline}
+                  className="text-[0.8rem] bg-transparent hover:bg-red-500 text-red-700 font-semibold hover:text-white py-[0.1rem] px-[0.3rem] border border-red-500 hover:border-transparent rounded"
+                >
+                  Decline
+                </button>
               </>
             )}
 

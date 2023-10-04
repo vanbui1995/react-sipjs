@@ -432,6 +432,13 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@tailwindcss/forms@^0.5.6":
+  version "0.5.6"
+  resolved "https://registry.yarnpkg.com/@tailwindcss/forms/-/forms-0.5.6.tgz#29c6c2b032b363e0c5110efed1499867f6d7e868"
+  integrity sha512-Fw+2BJ0tmAwK/w01tEFL5TiaJBX1NLT1/YbWgvm7ws3Qcn11kiXxzNTEQDMs5V3mQemhB56l3u0i9dwdzSQldA==
+  dependencies:
+    mini-svg-data-uri "^1.2.3"
+
 "@types/babel__core@^7.20.2":
   version "7.20.2"
   resolved "https://registry.yarnpkg.com/@types/babel__core/-/babel__core-7.20.2.tgz#215db4f4a35d710256579784a548907237728756"
@@ -1355,6 +1362,11 @@ micromatch@^4.0.4, micromatch@^4.0.5:
     braces "^3.0.2"
     picomatch "^2.3.1"
 
+mini-svg-data-uri@^1.2.3:
+  version "1.4.4"
+  resolved "https://registry.yarnpkg.com/mini-svg-data-uri/-/mini-svg-data-uri-1.4.4.tgz#8ab0aabcdf8c29ad5693ca595af19dd2ead09939"
+  integrity sha512-r9deDe9p5FJUPZAk3A59wGH7Ii9YrjjWw0jmw/liSbHl2CHiyXj6FcDXDu2K3TjVAXqiJdaw3xxwlZZr9E6nHg==
+
 minimatch@^3.0.4, minimatch@^3.0.5, minimatch@^3.1.1, minimatch@^3.1.2:
   version "3.1.2"
   resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-3.1.2.tgz#19cd194bfd3e428f049a70817c038d89ab4be35b"
@@ -1577,10 +1589,10 @@ react-refresh@^0.14.0:
   resolved "https://registry.yarnpkg.com/react-refresh/-/react-refresh-0.14.0.tgz#4e02825378a5f227079554d4284889354e5f553e"
   integrity sha512-wViHqhAd8OHeLS/IRMJjTSDHF3U9eWi62F/MledQGPdJGDhodXJ9PBLNGr6WWL7qlH12Mt3TyTpbS+hGXMjCzQ==
 
-react-sipjs-client@^0.0.3:
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/react-sipjs-client/-/react-sipjs-client-0.0.3.tgz#954490ec683657a9c49d11a0c050b11fea437972"
-  integrity sha512-97vOzf7tu9OygND7CP/8c+qpUMOcgUpsxgHfsIVshU5APJHeB7U3nT+o2G++6Ta7Dd29TLGFj69G/KBzuQ1asw==
+react-sipjs@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/react-sipjs/-/react-sipjs-0.0.2.tgz#ddb5cdeff69ce463de96eb7b6f9a707fb573578d"
+  integrity sha512-1qkQBwYG24+KtLmoU5oqPyRVKNjw5Zc8QGdohK2Ut10xFry1q3ATCUixAcjJYynoXz2Ha0O5YadS1k+EAdyBeA==
   dependencies:
     sip.js "^0.21.2"
 

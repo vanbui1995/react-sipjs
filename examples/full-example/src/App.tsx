@@ -1,4 +1,4 @@
-import { SIPProvider } from "../../../src/sip-provider";
+import { SIPProvider } from "react-sipjs";
 import { CallCenter } from "./CallCenter";
 
 function App() {
