@@ -83,7 +83,7 @@ To get a local copy up and running follow these simple example steps.
 
 Install via npm or yarn
 
-`yarn install react-sipjs`
+`yarn add react-sipjs`
 `npm install react-sipjs`
 
 
