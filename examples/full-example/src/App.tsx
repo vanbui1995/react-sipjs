@@ -1,4 +1,3 @@
-import React from "react";
 import { SIPProvider } from "../../../src/sip-provider";
 import { CallCenter } from "./CallCenter";
 
@@ -11,7 +10,9 @@ function App() {
           webSocketServer: "wss://sip.jambonz.cloud:8443",
         }}
       >
-        <CallCenter />
+        <div>
+          <CallCenter />
+        </div>
       </SIPProvider>
     </div>
   );
