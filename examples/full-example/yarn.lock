@@ -1589,10 +1589,10 @@ react-refresh@^0.14.0:
   resolved "https://registry.yarnpkg.com/react-refresh/-/react-refresh-0.14.0.tgz#4e02825378a5f227079554d4284889354e5f553e"
   integrity sha512-wViHqhAd8OHeLS/IRMJjTSDHF3U9eWi62F/MledQGPdJGDhodXJ9PBLNGr6WWL7qlH12Mt3TyTpbS+hGXMjCzQ==
 
-react-sipjs@^0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/react-sipjs/-/react-sipjs-0.0.2.tgz#ddb5cdeff69ce463de96eb7b6f9a707fb573578d"
-  integrity sha512-1qkQBwYG24+KtLmoU5oqPyRVKNjw5Zc8QGdohK2Ut10xFry1q3ATCUixAcjJYynoXz2Ha0O5YadS1k+EAdyBeA==
+react-sipjs@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/react-sipjs/-/react-sipjs-0.0.3.tgz#216ea1babcc7538aa07e4e8fc23bfa2304c9fccb"
+  integrity sha512-gd0vRreqhO/ao66YhAvfA+hzU7jRxiRGqOgLBpeW4xrV44jEwe+Ara+L7ImenYquTUDCCxvdR+Ym/sUtFq7IXg==
   dependencies:
     sip.js "^0.21.2"
 

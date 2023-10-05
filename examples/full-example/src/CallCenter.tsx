@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { RegisterStatus, CONNECT_STATUS, useSIPProvider } from "react-sipjs";
+import { CallSessionItem } from "./CallSessionItem";
 
 export const CallCenter = () => {
   const {
