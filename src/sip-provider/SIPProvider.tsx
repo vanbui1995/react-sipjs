@@ -15,7 +15,7 @@ import {
 export const SIPProvider = (props: {
   options: SIPProviderOptions;
   children: ReactNode | JSX.Element;
-}): React.ReactNode => {
+}): JSX.Element => {
   const { options, children } = props;
   const refAudioRemote = useRef<HTMLAudioElement>(null);
 
