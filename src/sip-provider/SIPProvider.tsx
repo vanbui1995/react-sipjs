@@ -1,4 +1,4 @@
-import { ReactNode, useCallback, useRef, useState } from "react";
+import { ReactNode, RefObject, useCallback, useRef, useState } from "react";
 import React from "react";
 import { Session } from "sip.js/lib/api/session";
 import { SessionManager } from "sip.js/lib/platform/web";
@@ -10,15 +10,17 @@ import {
   SIPProviderOptions,
   CONNECT_STATUS,
   SessionTimer,
+  MediaOption,
+  PlatformType,
 } from "../type";
 
 export const SIPProvider = (props: {
   options: SIPProviderOptions;
   children: ReactNode | JSX.Element;
-}): React.ReactNode => {
+}): JSX.Element => {
   const { options, children } = props;
-  const refAudioRemote = useRef<HTMLAudioElement>(null);
-
+  let refAudioRemote: RefObject<any> | null = null;
+  const isWebPlatform = !options?.platform || options?.platform !== PlatformType.REACT_NATIVE
   const [sessions, setSessions] = useState<Record<string, Session>>({});
   const [sessionTimer, setSessionTimer] = useState<SessionTimer>({});
   const [sessionManager, setSessionManager] = useState<SessionManager | null>(
@@ -31,6 +33,9 @@ export const SIPProvider = (props: {
     RegisterStatus.UNREGISTERED
   );
 
+  if (isWebPlatform) {
+    refAudioRemote = useRef<HTMLAudioElement>(null);
+  }
   const updateSession = useCallback(
     (session: Session) => {
       setSessions((sessions) => ({
@@ -42,21 +47,24 @@ export const SIPProvider = (props: {
   );
 
   const connectAndRegister = useCallback((sipAccount: SIPAccount) => {
+    const mediaOption: MediaOption = {
+      constraints: {
+        audio: true,
+        video: false,
+      },
+    };
+    if (isWebPlatform) {
+      mediaOption.remote = {
+        audio: refAudioRemote.current as HTMLAudioElement,
+      };
+    }
     const sessionManager = new SessionManager(options.webSocketServer, {
       aor: `sip:${sipAccount.username}@${options.domain}`,
       userAgentOptions: {
         authorizationUsername: sipAccount.username,
         authorizationPassword: sipAccount.password,
       },
-      media: {
-        constraints: {
-          audio: true,
-          video: false,
-        },
-        remote: {
-          audio: refAudioRemote.current as HTMLAudioElement,
-        },
-      },
+      media: mediaOption,
       delegate: {
         onCallCreated: (session) => {
           session.stateChange.addListener((state) => {
@@ -143,7 +151,9 @@ export const SIPProvider = (props: {
         {children}
       </ProviderContext.Provider>
 
-      <audio ref={refAudioRemote} />
+      {isWebPlatform && (
+        <audio ref={refAudioRemote} />
+      )}
     </>
   );
 };
