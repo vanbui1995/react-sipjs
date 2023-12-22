@@ -1,4 +1,4 @@
-import { ReactNode, useCallback, useRef, useState } from "react";
+import { ReactNode, RefObject, useCallback, useRef, useState } from "react";
 import React from "react";
 import { Session } from "sip.js/lib/api/session";
 import { SessionManager } from "sip.js/lib/platform/web";
@@ -11,6 +11,7 @@ import {
   CONNECT_STATUS,
   SessionTimer,
   MediaOption,
+  PlatformType,
 } from "../type";
 
 export const SIPProvider = (props: {
@@ -18,8 +19,8 @@ export const SIPProvider = (props: {
   children: ReactNode | JSX.Element;
 }): JSX.Element => {
   const { options, children } = props;
-  let refAudioRemote: any = null;
-  const isWebPlatform = !options?.platform || options?.platform !== "react-native"
+  let refAudioRemote: RefObject<any> | null = null;
+  const isWebPlatform = !options?.platform || options?.platform !== PlatformType.REACT_NATIVE
   const [sessions, setSessions] = useState<Record<string, Session>>({});
   const [sessionTimer, setSessionTimer] = useState<SessionTimer>({});
   const [sessionManager, setSessionManager] = useState<SessionManager | null>(
