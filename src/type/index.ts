@@ -4,6 +4,7 @@ import { SessionManager } from "sip.js/lib/platform/web";
 export interface SIPProviderOptions {
   webSocketServer: string;
   domain: string;
+  platform?: string
 }
 
 export enum CONNECT_STATUS {
@@ -44,3 +45,8 @@ export type Timer = {
 };
 
 export type SessionTimer = Record<string, Timer>;
+
+export type MediaOption = {
+  constraints: any,
+  remote?: any
+}
