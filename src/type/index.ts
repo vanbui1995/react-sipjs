@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import { Session } from "sip.js";
 import { SessionManager } from "sip.js/lib/platform/web";
 
@@ -44,3 +45,8 @@ export type Timer = {
 };
 
 export type SessionTimer = Record<string, Timer>;
+
+export interface SIPProviderProps {
+  options: SIPProviderOptions;
+  children: ReactNode | JSX.Element;
+}
