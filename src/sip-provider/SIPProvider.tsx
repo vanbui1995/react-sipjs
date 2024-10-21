@@ -48,6 +48,11 @@ export const SIPProvider = (props: {
         authorizationUsername: sipAccount.username,
         authorizationPassword: sipAccount.password,
       },
+      rtcConfiguration: {
+        iceServers: [
+          { urls: 'stun:stun.l.google.com:19302' },
+        ],
+      },            
       media: {
         constraints: {
           audio: true,
