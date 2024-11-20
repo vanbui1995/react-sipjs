@@ -1,7 +1,7 @@
 import { ReactNode, useCallback, useRef, useState } from "react";
 import React from "react";
 import { Session } from "sip.js/lib/api/session";
-import { SessionManager } from "sip.js/lib/platform/web";
+import { SessionManager, SessionManagerOptions } from "sip.js/lib/platform/web";
 import { ErrorMessageLevel1, ErrorMessageLevel2 } from "../enums/error";
 import { ProviderContext } from "./SIPProviderContext";
 import {
@@ -15,9 +15,11 @@ import {
 export const SIPProvider = (props: {
   options: SIPProviderOptions;
   children: ReactNode | JSX.Element;
+  mergedSessionManagerOptions?: SessionManagerOptions;
 }): React.ReactNode => {
-  const { options, children } = props;
+  const { options, mergedSessionManagerOptions = {}, children } = props;
   const refAudioRemote = useRef<HTMLAudioElement>(null);
+  const refVideoRemote = useRef<HTMLVideoElement>(null);
 
   const [sessions, setSessions] = useState<Record<string, Session>>({});
   const [sessionTimer, setSessionTimer] = useState<SessionTimer>({});
@@ -51,10 +53,15 @@ export const SIPProvider = (props: {
       media: {
         constraints: {
           audio: true,
-          video: false,
+          video: true,
         },
         remote: {
-          audio: refAudioRemote.current as HTMLAudioElement,
+          audio:
+            props.options.refAudioRemote ??
+            (refAudioRemote.current as HTMLAudioElement),
+          video:
+            props.options.refVideoRemote ??
+            (refVideoRemote.current as HTMLVideoElement),
         },
       },
       delegate: {
@@ -123,6 +130,7 @@ export const SIPProvider = (props: {
           setStatus(CONNECT_STATUS.DISCONNECTED);
         },
       },
+      ...mergedSessionManagerOptions,
     });
     setSessionManager(sessionManager);
     sessionManager.connect();
@@ -142,8 +150,8 @@ export const SIPProvider = (props: {
       >
         {children}
       </ProviderContext.Provider>
-
       <audio ref={refAudioRemote} />
+      <video ref={refVideoRemote} />
     </>
   );
 };

@@ -4,6 +4,8 @@ import { SessionManager } from "sip.js/lib/platform/web";
 export interface SIPProviderOptions {
   webSocketServer: string;
   domain: string;
+  refAudioRemote?: HTMLAudioElement;
+  refVideoRemote?: HTMLVideoElement;
 }
 
 export enum CONNECT_STATUS {
