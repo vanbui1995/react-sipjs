@@ -5,6 +5,10 @@ import { CallTimer } from "./CallTimer";
 
 export const CallSessionItem = (props: { sessionId: string }) => {
   const { sessionId } = props;
+  const sessionCall = useSessionCall(sessionId);
+  if (sessionCall === null) {
+    return null;
+  }
   const {
     isHeld,
     isMuted,
@@ -18,7 +22,8 @@ export const CallSessionItem = (props: { sessionId: string }) => {
     unmute,
     direction,
     timer,
-  } = useSessionCall(sessionId);
+  } = sessionCall;
+
   return (
     <li className="flex justify-between gap-x-6 py-5">
       <div className="flex min-w-0 gap-x-4">
